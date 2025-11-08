@@ -10,5 +10,5 @@ export type Device = {
         updatedAt: string,
 }
 
-type DeviceType = 'sensor' | 'actuator'
-type DeviceStatus = 'online' | 'offline'
+export type DeviceType = 'actuator' | 'gateway'
+export type DeviceStatus = 'online' | 'offline' | 'error'

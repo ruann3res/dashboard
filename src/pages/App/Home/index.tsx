@@ -1,7 +1,7 @@
 import { useToast } from '@/hooks'
 import { Button } from '@/components/ui/Button'
 
-export const Home = () => {
+export const HomePage = () => {
   const { showToast } = useToast()
 
   const handleShowToast = (type: 'success' | 'error' | 'warning' | 'info') => {

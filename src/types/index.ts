@@ -1,2 +1,5 @@
 export * from './project'
 export * from './device'
+export * from './actuator'
+export * from './device-table'
+export * from './user'

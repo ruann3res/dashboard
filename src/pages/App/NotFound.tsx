@@ -3,7 +3,7 @@ import { Clock } from "@/components/ui/Icons/icons/clock"
 import { AnimateIcon } from "@/components/ui/Icons/icons/icon"
 
 
-export function NotFound() {
+export const NotFoundPage = () => {
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-base-200 text-base-content p-6 animate-fade-in">
       <div className="relative mb-8">

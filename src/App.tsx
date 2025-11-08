@@ -1,4 +1,4 @@
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, useLocation } from 'react-router-dom'
 import { ToastProvider } from './contexts/ToastContext'
 import { SidebarProvider } from './contexts/SidebarContext'
 import { ToastContainer } from './components/ui/Toast/ToastContainer'
@@ -8,6 +8,17 @@ import { useSidebar } from './contexts/SidebarContext'
 
 function AppContent() {
   const { isMobileOpen, toggleMobileSidebar } = useSidebar()
+  const location = useLocation()
+  const isAuthPage = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/verify'
+
+  if (isAuthPage) {
+    return (
+      <>
+        <AppRoutes />
+        <ToastContainer />
+      </>
+    )
+  }
 
   return (
     <div className="flex h-screen overflow-hidden">

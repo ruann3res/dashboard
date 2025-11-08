@@ -1,3 +1,5 @@
-export { Home } from './Home'
-export { Projects } from './Projects'
-export { NotFound } from './NotFound'
+export { HomePage } from './Home'
+export { ProjectsPage } from './Projects'
+export { ActuatorPage } from './Actuator'
+export { DevicePage } from './Device'
+export { NotFoundPage } from './NotFound'

@@ -1,12 +1,14 @@
 import { Link, useLocation } from 'react-router-dom'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { useSidebar } from '@/contexts/SidebarContext'
+import { useLogout } from '@/hooks/use-logout'
 import { menuItems } from './menu'
-import type { MenuItem } from '@/types/sidebar'
+import type { MenuItem } from './menu'
 
 export const Sidebar = () => {
   const location = useLocation()
   const { isCollapsed, isMobileOpen, toggleSidebar } = useSidebar()
+  const { logout } = useLogout()
 
   return (
     <aside 
@@ -55,11 +57,18 @@ export const Sidebar = () => {
         </ul>
       </nav>
 
-      <div className={`p-4 border-t border-base-300 ${isCollapsed ? 'hidden' : ''}`}>
-        <div className="flex items-center justify-between">
+      <div className="p-4 border-t border-base-300 space-y-3">
+        <div className={`flex items-center justify-between ${isCollapsed ? 'hidden' : ''}`}>
           <span className="text-sm text-base-content/70">Tema</span>
           <ThemeToggle />
         </div>
+        <button
+          onClick={logout}
+          className={`btn btn-error btn-block ${isCollapsed ? 'btn-square' : ''}`}
+          title={isCollapsed ? 'Sair' : undefined}
+        >
+          {isCollapsed ? '🚪' : 'Sair'}
+        </button>
       </div>
     </aside>
   )

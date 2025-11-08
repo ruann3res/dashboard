@@ -1,13 +1,16 @@
 import { useState } from "react"
 import type { Project } from "@/types"
+import { Button } from "@/components/ui/Button"
 
 type UpdateModalProps = {
   project: Project | null
   onClose: () => void
   onSubmit: (data: { name: string; description: string; visibility: "public" | "private" }) => void
+  onDelete?: (projectId: string) => void
+  isDeleting?: boolean
 }
 
-export function UpdateModal({ project, onClose, onSubmit }: UpdateModalProps) {
+export function UpdateModal({ project, onClose, onSubmit, onDelete, isDeleting = false }: UpdateModalProps) {
   if (!project) return null
 
   const [formData, setFormData] = useState({
@@ -19,6 +22,12 @@ export function UpdateModal({ project, onClose, onSubmit }: UpdateModalProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     onSubmit(formData)
+  }
+
+  const handleDelete = () => {
+    if (onDelete && confirm('Tem certeza que deseja excluir este projeto?')) {
+      onDelete(project.id)
+    }
   }
 
   return (
@@ -82,13 +91,34 @@ export function UpdateModal({ project, onClose, onSubmit }: UpdateModalProps) {
             </select>
           </div>
 
-          <div className="pt-2 flex justify-end">
-            <button
-              type="submit"
-              className="btn btn-primary rounded-lg px-5 transition-all hover:shadow-md"
-            >
-              Salvar
-            </button>
+          <div className="pt-2 flex justify-between items-center gap-4">
+            {onDelete && (
+              <Button
+                type="button"
+                variant="error"
+                onClick={handleDelete}
+                disabled={isDeleting}
+              >
+                {isDeleting ? 'Excluindo...' : 'Excluir Projeto'}
+              </Button>
+            )}
+            <div className="flex gap-2 ml-auto">
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={onClose}
+                disabled={isDeleting}
+              >
+                Cancelar
+              </Button>
+              <Button
+                type="submit"
+                variant="primary"
+                disabled={isDeleting}
+              >
+                Salvar
+              </Button>
+            </div>
           </div>
         </form>
       </div>

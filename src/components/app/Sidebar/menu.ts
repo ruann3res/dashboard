@@ -1,7 +1,13 @@
-import type { MenuItem } from "@/types/sidebar";
+export interface MenuItem {
+  label: string
+  path: string
+}
 
 export const menuItems: Array<MenuItem> = [
-  { label: 'Home', path: '/' },
-  { label: 'Projects', path: '/projects' },
-  { label: 'Settings', path: '/settings' }
+  { label: 'Projects', path: '/' },
+  { label: 'Devices', path: '/devices' },
+  { label: 'Actuators', path: '/actuators' },
+  { label: 'Settings', path: '/settings' },
+  
+  
 ]
