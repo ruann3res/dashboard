@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
-import { ActuatorPage,ProjectsPage,DevicePage, NotFoundPage } from '@/pages/App'
+import { ActuatorPage,ProjectsPage,DevicePage, SettingsPage, NotFoundPage } from '@/pages/App'
 import { LoginPage, RegisterPage, VerifyPage } from '@/pages/Auth'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { GuestRoute } from '@/components/GuestRoute'
@@ -53,6 +53,14 @@ export const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <DevicePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute>
+            <SettingsPage />
           </ProtectedRoute>
         }
       />
