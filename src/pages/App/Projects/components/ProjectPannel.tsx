@@ -11,7 +11,7 @@ type ProjectPannelProps = {
 
 export function ProjectPannel({ title, properties, onEditClick }: ProjectPannelProps) {
   return (
-    <div className="card bg-primary-content border border-base-200 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 relative overflow-hidden group">
+    <div className="card bg-base-100 border border-base-200 rounded-2xl shadow-xl hover:shadow-xl transition-all duration-300 relative overflow-hidden group">
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 opacity-50 group-hover:opacity-70 transition-opacity duration-500" />
 
       <div className="card-body relative z-10">
