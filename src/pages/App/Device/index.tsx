@@ -37,7 +37,7 @@ export const DevicePage = () => {
         id: device.id,
         name: device.name,
         status: device.status === 'online' ? 'online' : 'offline',
-        projectName: project?.name || 'Unknown',
+        projectName: project?.name || 'Desconhecido',
         lastUpdate: new Date(device.updatedAt),
       } satisfies DeviceRow
     })

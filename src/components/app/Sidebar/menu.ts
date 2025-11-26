@@ -4,10 +4,10 @@ export interface MenuItem {
 }
 
 export const menuItems: Array<MenuItem> = [
-  { label: 'Projects', path: '/' },
-  { label: 'Devices', path: '/devices' },
-  { label: 'Actuators', path: '/actuators' },
-  { label: 'Settings', path: '/settings' },
+  { label: 'Projetos', path: '/' },
+  { label: 'Dispositivos', path: '/devices' },
+  { label: 'Atuadores', path: '/actuators' },
+  { label: 'Configurações', path: '/settings' },
   
   
 ]

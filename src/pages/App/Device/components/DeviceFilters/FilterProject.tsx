@@ -19,7 +19,7 @@ export const FilterProject = ({ selectedProjectId, onProjectChange }: FilterProj
     <div className="form-control w-full max-w-xs">
       <label className="label">
         <span className="label-text text-sm font-medium text-base-content/70">
-          Filter project
+          Filtrar por Projeto
         </span>
       </label>
       <select
@@ -27,9 +27,9 @@ export const FilterProject = ({ selectedProjectId, onProjectChange }: FilterProj
         value={selectedProjectId || ''}
         onChange={handleChange}
         disabled={isLoading}
-        aria-label="Filter project"
+        aria-label="Filtrar por projeto"
       >
-        <option value="">All projects</option>
+        <option value="">Todos os projetos</option>
         {projects.map((project: Project) => (
           <option key={project.id} value={project.id}>
             {project.name}

@@ -138,6 +138,7 @@ export const ProjectsPage = () => {
                           {project.visibility === 'private' ? <LockKeyhole /> : <LockKeyholeOpen />}
                         </AnimateIcon>,
                         icon: true,
+
                         onClick: () => handleToggleVisibility(project),
                       },
                       { key: 'Dispositivos ativos', value: String(activeCount), color: activeCount > 0 ? 'success' : 'error' },
