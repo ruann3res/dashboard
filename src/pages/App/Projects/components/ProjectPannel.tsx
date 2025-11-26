@@ -5,7 +5,7 @@ import { AnimateIcon } from "@/components/ui/Icons/icons/icon";
 
 type ProjectPannelProps = {
   title: string
-  properties?: { key: string; value: string; color: "success" | "error" | "warning" | "info" , component?: React.ReactNode, icon?: boolean }[]
+  properties?: { key: string; value: string; color: "success" | "error" | "warning" | "info" , component?: React.ReactNode, icon?: boolean, onClick?: () => void }[]
   onEditClick?: () => void
 }
 
@@ -45,11 +45,18 @@ export function ProjectPannel({ title, properties, onEditClick }: ProjectPannelP
                 {properties.map((property) => (
                   <div
                     key={property.key}
-                    className="flex items-center justify-between py-3 px-4 bg-base-100 border border-base-200/50 rounded-xl"
+                    className={`flex items-center justify-between py-3 px-4 bg-base-100 border border-base-200/50 rounded-xl ${property.onClick ? 'cursor-pointer hover:bg-base-200 transition-colors' : ''}`}
+                    onClick={property.onClick}
                   >
                     <span className="text-base font-semibold text-base-content/80">{property.key}</span>
                     <div className="flex items-center gap-3">
-                      <Status color={property.color} text={property.value} />
+                      {property.icon && property.component ? (
+                        <div className="flex items-center justify-center h-10 w-10 border-2 border-base-300 rounded-xl">
+                          {property.component}
+                        </div>
+                      ) : (
+                        <Status color={property.color} text={property.value} />
+                      )}
                     </div>
                   </div>
                 ))}
@@ -64,6 +71,7 @@ export function ProjectPannel({ title, properties, onEditClick }: ProjectPannelP
                   value={property.value}
                   component={property.component}
                   icon={property.icon}
+                  onClick={property.onClick}
                 />
               ))}
             </div>

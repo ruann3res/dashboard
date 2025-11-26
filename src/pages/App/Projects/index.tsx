@@ -77,6 +77,19 @@ export const ProjectsPage = () => {
     }
   }
 
+  const handleToggleVisibility = async (project: Project) => {
+    try {
+      await updateProjectMutation.mutateAsync({
+        id: project.id,
+        data: {
+          visibility: project.visibility === 'public' ? 'private' : 'public',
+        },
+      })
+    } catch (error) {
+      // Error já é tratado no hook
+    }
+  }
+
   if (isLoading) {
     return (
       <div className="p-8">
@@ -125,6 +138,7 @@ export const ProjectsPage = () => {
                           {project.visibility === 'private' ? <LockKeyhole /> : <LockKeyholeOpen />}
                         </AnimateIcon>,
                         icon: true,
+                        onClick: () => handleToggleVisibility(project),
                       },
                       { key: 'Dispositivos ativos', value: String(activeCount), color: activeCount > 0 ? 'success' : 'error' },
                       { key: 'Dispositivos inativos', value: String(inactiveCount), color: inactiveCount >= 0 ? 'error' : 'success' },
