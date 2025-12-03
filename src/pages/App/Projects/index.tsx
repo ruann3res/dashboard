@@ -77,10 +77,23 @@ export const ProjectsPage = () => {
     }
   }
 
+  const handleToggleVisibility = async (project: Project) => {
+    try {
+      await updateProjectMutation.mutateAsync({
+        id: project.id,
+        data: {
+          visibility: project.visibility === 'public' ? 'private' : 'public',
+        },
+      })
+    } catch (error) {
+      // Error já é tratado no hook
+    }
+  }
+
   if (isLoading) {
     return (
       <div className="p-8">
-        <div className="mx-auto max-w-6xl space-y-6">
+        <div className="mx-auto max-w-7xl space-y-6">
           <div className="flex justify-center items-center py-12">
             <span className="loading loading-spinner loading-lg"></span>
           </div>
@@ -92,7 +105,7 @@ export const ProjectsPage = () => {
   return (
     <>
       <div className="p-8">
-        <div className="mx-auto max-w-6xl space-y-6">
+        <div className="mx-auto max-w-7xl space-y-6">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-3xl font-bold text-base-content">Projetos</h1>
             <Button
@@ -125,6 +138,8 @@ export const ProjectsPage = () => {
                           {project.visibility === 'private' ? <LockKeyhole /> : <LockKeyholeOpen />}
                         </AnimateIcon>,
                         icon: true,
+
+                        onClick: () => handleToggleVisibility(project),
                       },
                       { key: 'Dispositivos ativos', value: String(activeCount), color: activeCount > 0 ? 'success' : 'error' },
                       { key: 'Dispositivos inativos', value: String(inactiveCount), color: inactiveCount >= 0 ? 'error' : 'success' },

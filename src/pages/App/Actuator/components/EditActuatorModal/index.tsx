@@ -255,7 +255,7 @@ export const EditActuatorModal = ({ actuatorId, onClose }: EditActuatorModalProp
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="label">
-                <span className="label-text font-semibold text-lg">Valor Mínimo (Health)</span>
+                <span className="label-text font-semibold text-lg">Valor Mínimo (Saúde)</span>
               </label>
               <input
                 type="number"
@@ -281,7 +281,7 @@ export const EditActuatorModal = ({ actuatorId, onClose }: EditActuatorModalProp
 
             <div className="space-y-2">
               <label className="label">
-                <span className="label-text font-semibold text-lg">Valor Máximo (Health)</span>
+                <span className="label-text font-semibold text-lg">Valor Máximo (Saúde)</span>
               </label>
               <input
                 type="number"

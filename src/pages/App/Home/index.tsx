@@ -13,7 +13,7 @@ export const HomePage = () => {
       <div className="flex flex-col gap-8">
         <div>
           <h1 className="text-4xl font-bold text-base-content mb-4">
-            Hello World
+            Olá, Mundo
           </h1>
           <p className="text-lg text-base-content/70">
             Bem-vindo ao dashboard UAIPY
@@ -24,11 +24,11 @@ export const HomePage = () => {
           <h2 className="text-2xl font-semibold mb-4">Teste os Componentes</h2>
           
           <div className="flex flex-wrap gap-4 mb-6">
-            <Button variant="primary">Botão Primary</Button>
-            <Button variant="secondary">Botão Secondary</Button>
-            <Button variant="accent">Botão Accent</Button>
-            <Button variant="ghost">Botão Ghost</Button>
-            <Button variant="outline">Botão Outline</Button>
+            <Button variant="primary">Botão Principal</Button>
+            <Button variant="secondary">Botão Secundário</Button>
+            <Button variant="accent">Botão Destaque</Button>
+            <Button variant="ghost">Botão Fantasma</Button>
+            <Button variant="outline">Botão Contorno</Button>
           </div>
 
           <div className="flex flex-wrap gap-4">
@@ -36,25 +36,25 @@ export const HomePage = () => {
               variant="success"
               onClick={() => handleShowToast('success')}
             >
-              Toast Success
+              Toast Sucesso
             </Button>
             <Button 
               variant="error"
               onClick={() => handleShowToast('error')}
             >
-              Toast Error
+              Toast Erro
             </Button>
             <Button 
               variant="warning"
               onClick={() => handleShowToast('warning')}
             >
-              Toast Warning
+              Toast Aviso
             </Button>
             <Button 
               variant="info"
               onClick={() => handleShowToast('info')}
             >
-              Toast Info
+              Toast Informação
             </Button>
           </div>
         </div>

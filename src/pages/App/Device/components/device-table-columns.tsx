@@ -12,17 +12,17 @@ const formatDate = (date: Date): string => {
   if (daysDiff === 0) {
     const hours = date.getHours().toString().padStart(2, '0')
     const minutes = date.getMinutes().toString().padStart(2, '0')
-    return `${hours}:${minutes}, Today`
+    return `${hours}:${minutes}, Hoje`
   }
 
   if (daysDiff === 1) {
     const hours = date.getHours().toString().padStart(2, '0')
     const minutes = date.getMinutes().toString().padStart(2, '0')
-    return `${hours}:${minutes}, Yesterday`
+    return `${hours}:${minutes}, Ontem`
   }
 
   if (daysDiff < 7) {
-    return `${daysDiff} days ago`
+    return `${daysDiff} dias atrás`
   }
 
   return date.toLocaleDateString('pt-BR')
@@ -30,7 +30,7 @@ const formatDate = (date: Date): string => {
 
 export const createColumns = () => [
   columnHelper.accessor('name', {
-    header: 'Device Name',
+    header: 'Nome do Dispositivo',
     cell: (info) => info.getValue(),
   }),
   columnHelper.accessor('status', {
@@ -38,22 +38,22 @@ export const createColumns = () => [
     cell: ({ row }) => {
       const status = row.original.status
       if (status === 'online') {
-        return <span className="badge badge-success badge-sm">{status}</span>
+        return <span className="badge badge-success badge-sm">Online</span>
       }
-      return <span className="badge badge-error badge-sm">{status}</span>
+      return <span className="badge badge-error badge-sm">Offline</span>
     },
   }),
   columnHelper.accessor('projectName', {
-    header: 'Project',
+    header: 'Projeto',
     cell: (info) => info.getValue(),
   }),
   columnHelper.accessor('lastUpdate', {
-    header: 'Last Update',
+    header: 'Última Atualização',
     cell: (info) => formatDate(info.getValue()),
   }),
   columnHelper.display({
     id: 'actions',
-    header: 'Actions',
+    header: 'Ações',
     cell: ({ row, table }) => {
       const onEditClick = (table.options.meta as { onEditClick?: (deviceId: string) => void })?.onEditClick
       return (
@@ -65,9 +65,9 @@ export const createColumns = () => [
               onEditClick(row.original.id)
             }
           }}
-          aria-label={`Edit ${row.original.name}`}
+          aria-label={`Editar ${row.original.name}`}
         >
-          EDIT
+          EDITAR
         </Button>
       )
     },

@@ -51,7 +51,7 @@ export const CreateProjectModal = ({ isOpen, onClose, onSubmit }: CreateProjectM
             type="button"
             className="btn btn-sm btn-ghost hover:bg-base-200 rounded-full"
             onClick={handleClose}
-            aria-label="Close modal"
+            aria-label="Fechar modal"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

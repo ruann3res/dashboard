@@ -16,23 +16,23 @@ export const FORM_LABELS = {
   
   export const INFO_LABELS = {
     STATUS: 'Status:',
-    TYPE: 'Type:',
-    PROJECT: 'Project:',
-    LAST_UPDATE: 'Last updat:',
+    TYPE: 'Tipo:',
+    PROJECT: 'Projeto:',
+    LAST_UPDATE: 'Última atualização:',
   } as const
   
   export const INFO_VALUES = {
     TYPE: 'Estação Met.',
-    STATUS_ACTIVATED: 'activated',
+    STATUS_ACTIVATED: 'ativado',
   } as const
   
   export const BUTTON_LABELS = {
     SAVE: 'Salvar',
-    DELETE_DEVICE: 'DELETE DEVICE',
-    CLOSE: 'fechar',
+    DELETE_DEVICE: 'EXCLUIR DISPOSITIVO',
+    CLOSE: 'Fechar',
   } as const
   
-  export const MODAL_TITLE = 'Device Settings' as const
+  export const MODAL_TITLE = 'Configurações do Dispositivo' as const
   
   export const DELETE_CONFIRM_MESSAGE = 'Tem certeza que deseja excluir este dispositivo?' as const
   
@@ -43,7 +43,7 @@ export const FORM_LABELS = {
   
 export const INFO_VALUES_EXTENDED = {
   ...INFO_VALUES,
-  UNKNOWN_PROJECT: 'Unknown',
+  UNKNOWN_PROJECT: 'Desconhecido',
 } as const
 
 export const STATUS_OPTIONS = [

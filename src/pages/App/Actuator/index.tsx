@@ -35,7 +35,7 @@ export const ActuatorPage = () => {
       return {
         id: actuator.id,
         name: actuator.name,
-        deviceName: device?.name || 'Unknown',
+        deviceName: device?.name || 'Desconhecido',
         unitOfMeasurement: actuator.unitOfMeasurement,
         alert: actuator.alert,
         health: actuator.health,
