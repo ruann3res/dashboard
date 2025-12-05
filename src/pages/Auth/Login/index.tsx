@@ -29,10 +29,54 @@ export const LoginPage = () => {
     return value.replace(/\D/g, '')
   }
 
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatPhone(e.target.value)
-    setValue('phone', formatted, { shouldValidate: true })
+  const formatPhoneMask = (value: string) => {
+    const numbers = formatPhone(value)
+    const length = numbers.length
+
+    const phoneFormats = [
+      {
+        maxLength: 2,
+        format: (nums: string) => nums,
+      },
+      {
+        maxLength: 6,
+        format: (nums: string) => `(${nums.slice(0, 2)}) ${nums.slice(2)}`,
+      },
+      {
+        maxLength: 7,
+        format: (nums: string) => `(${nums.slice(0, 2)}) ${nums.slice(2, 6)}-${nums.slice(6)}`,
+      },
+      {
+        maxLength: 10,
+        format: (nums: string) => {
+          // Para 10 dígitos, verifica se começa com 9 (celular) ou não (fixo)
+          const isCellphone = nums[2] === '9'
+          if (isCellphone) {
+            // Celular: (XX) 9XXXX-XXXX
+            return `(${nums.slice(0, 2)}) ${nums.slice(2, 7)}-${nums.slice(7)}`
+          } else {
+            // Fixo: (XX) XXXX-XXXX
+            return `(${nums.slice(0, 2)}) ${nums.slice(2, 6)}-${nums.slice(6)}`
+          }
+        },
+      },
+      {
+        maxLength: 11,
+        format: (nums: string) => `(${nums.slice(0, 2)}) ${nums.slice(2, 7)}-${nums.slice(7, 11)}`,
+      },
+    ]
+
+    const format = phoneFormats.find((f) => length <= f.maxLength) || phoneFormats[phoneFormats.length - 1]
+    return format.format(numbers)
   }
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const numbers = formatPhone(e.target.value)
+    const limitedNumbers = numbers.slice(0, 11)
+    setValue('phone', limitedNumbers, { shouldValidate: true })
+  }
+
+  const displayPhoneValue = phoneValue ? formatPhoneMask(phoneValue) : ''
 
   const onSubmit = (data: LoginFormData) => {
     login(data.phone, {
@@ -98,25 +142,26 @@ export const LoginPage = () => {
                   type="tel"
                   {...register('phone', {
                     required: 'Telefone é obrigatório',
-                    minLength: {
-                      value: 10,
-                      message: 'Telefone deve ter pelo menos 10 dígitos',
-                    },
-                    maxLength: {
-                      value: 15,
-                      message: 'Telefone deve ter no máximo 15 dígitos',
-                    },
-                    pattern: {
-                      value: /^\d+$/,
-                      message: 'Digite apenas números',
+                    validate: {
+                      minLength: (value) => {
+                        const numbers = formatPhone(value)
+                        return numbers.length >= 10 || 'Telefone deve ter pelo menos 10 dígitos'
+                      },
+                      maxLength: (value) => {
+                        const numbers = formatPhone(value)
+                        return numbers.length <= 11 || 'Telefone deve ter no máximo 11 dígitos'
+                      },
+                      onlyNumbers: (value) => {
+                        return /^\d+$/.test(formatPhone(value)) || 'Digite apenas números'
+                      },
                     },
                   })}
-                  value={phoneValue}
+                  value={displayPhoneValue}
                   onChange={handlePhoneChange}
                   className={`input input-bordered w-full rounded-lg h-12 focus:input-primary transition-colors ${
                     errors.phone ? 'input-error' : ''
                   }`}
-                  placeholder="5511999999999"
+                  placeholder="(34) 98619-9953"
                   autoComplete="tel"
                   maxLength={15}
                 />
@@ -125,7 +170,7 @@ export const LoginPage = () => {
                 )}
                 {!errors.phone && (
                   <p className="text-xs text-base-content/60">
-                    Digite apenas números (ex: 5511999999999)
+                    Digite apenas números
                   </p>
                 )}
               </div>
