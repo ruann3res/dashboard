@@ -5,6 +5,13 @@ import { useToast } from '@/hooks'
 import { extractErrorMessage } from '@/lib/error-utils'
 import type { Actuator, AlertRange, HealthRange } from '@/types/actuator'
 
+export const ACTUATORS_POLL_INTERVAL_MS = 5000
+
+interface UseActuatorsOptions {
+  /** Ativa refetch periódico — necessário no monitor pois atores são criados via /actor-data */
+  poll?: boolean
+}
+
 // API Response types (snake_case)
 interface ActorApiResponse {
   id: string
@@ -162,7 +169,9 @@ const transformUpdateToApiRequest = (update: {
   return request
 }
 
-export const useActuators = (deviceId?: string | null) => {
+export const useActuators = (deviceId?: string | null, options?: UseActuatorsOptions) => {
+  const poll = options?.poll ?? false
+
   return useQuery({
     queryKey: [QueryKeys.ACTUATORS, deviceId || 'all'],
     queryFn: async () => {
@@ -174,16 +183,17 @@ export const useActuators = (deviceId?: string | null) => {
       return response.data.actors.map(transformActorApiToActuator)
     },
     enabled: !!deviceId,
-    staleTime: 1000 * 60 * 5, // 5 minutos
-    gcTime: 1000 * 60 * 10, // 10 minutos
+    staleTime: poll ? 0 : 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 10,
     placeholderData: [],
+    refetchInterval: poll ? ACTUATORS_POLL_INTERVAL_MS : false,
     retry: (failureCount, error: any) => {
       if (error?.response?.status === 401) {
         return false
       }
       return failureCount < 2
     },
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: poll,
     refetchOnMount: true,
   })
 }

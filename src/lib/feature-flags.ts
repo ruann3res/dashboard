@@ -9,7 +9,10 @@
 // ============================================
 // CONTROLE DE MOCKS - Altere aqui para ativar/desativar
 // ============================================
-const USE_MOCK_API = true
+const USE_MOCK_API = false
+
+// Habilita a opção de envio do token via WhatsApp na tela de login
+const WHATSAPP_AUTH_ENABLED = false
 // ============================================
 
 export const featureFlags = {
@@ -18,4 +21,9 @@ export const featureFlags = {
    * Quando ativo, todas as chamadas de API retornam dados mockados
    */
   useMockApi: () => USE_MOCK_API,
+
+  /**
+   * Habilita seleção de WhatsApp como canal de envio do token
+   */
+  whatsappAuthEnabled: () => WHATSAPP_AUTH_ENABLED,
 }

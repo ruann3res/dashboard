@@ -1,18 +1,44 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Button } from '@/components/ui/Button'
-import { useAuthVerify } from '@/hooks'
+import { useAuthVerify, getStoredAuthDeliveryChannel } from '@/hooks'
+import type { TokenDeliveryChannel } from '@/types/auth'
 
 interface VerifyFormData {
   token: string
 }
 
+interface VerifyLocationState {
+  from?: string
+  channel?: TokenDeliveryChannel
+}
+
+const channelCopy: Record<TokenDeliveryChannel, { title: string; subtitle: string; hint: string }> = {
+  email: {
+    title: 'Verifique o código enviado para seu e-mail',
+    subtitle: 'Digite o código recebido via e-mail',
+    hint: 'Insira o código recebido via e-mail',
+  },
+  whatsapp: {
+    title: 'Verifique o código enviado no seu WhatsApp',
+    subtitle: 'Digite o código recebido via WhatsApp',
+    hint: 'Insira o código recebido via WhatsApp',
+  },
+}
+
 export const VerifyPage = () => {
   const navigate = useNavigate()
   const location = useLocation()
+  const locationState = location.state as VerifyLocationState | null
   const { mutate: verify, isPending: isLoading } = useAuthVerify()
   const [tempToken, setTempToken] = useState<string | null>(null)
+
+  const deliveryChannel = useMemo<TokenDeliveryChannel>(() => {
+    return locationState?.channel ?? getStoredAuthDeliveryChannel()
+  }, [locationState?.channel])
+
+  const copy = channelCopy[deliveryChannel]
 
   useEffect(() => {
     const token = localStorage.getItem('temp_auth_token')
@@ -44,7 +70,8 @@ export const VerifyPage = () => {
     verify(data.token, {
       onSuccess: () => {
         localStorage.removeItem('temp_auth_token')
-        const from = (location.state as { from?: string })?.from || '/'
+        localStorage.removeItem('auth_delivery_channel')
+        const from = locationState?.from || '/'
         navigate(from)
       },
     })
@@ -62,12 +89,12 @@ export const VerifyPage = () => {
               <div className="h-1 w-24 bg-white/30 mx-auto rounded-full" />
             </div>
             <p className="text-xl opacity-95 text-center leading-relaxed">
-              Verifique o código enviado para seu telefone
+              {copy.title}
             </p>
             <div className="mt-12 space-y-4 text-sm opacity-80">
               <div className="flex items-center space-x-3">
                 <div className="w-2 h-2 rounded-full bg-white" />
-                <span>Insira o código recebido via SMS</span>
+                <span>{copy.hint}</span>
               </div>
               <div className="flex items-center space-x-3">
                 <div className="w-2 h-2 rounded-full bg-white" />
@@ -88,7 +115,7 @@ export const VerifyPage = () => {
 
           <div className="hidden lg:block mb-10 space-y-3">
             <h2 className="text-4xl font-bold text-base-content tracking-tight">Verificar código</h2>
-            <p className="text-base-content/70 text-lg">Digite o código recebido via SMS</p>
+            <p className="text-base-content/70 text-lg">{copy.subtitle}</p>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">

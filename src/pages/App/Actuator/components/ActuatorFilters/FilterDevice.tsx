@@ -33,7 +33,7 @@ export const FilterDevice = ({ selectedDeviceId, onDeviceChange }: FilterDeviceP
         <option value="">Selecione um dispositivo</option>
         {devices.map((device: Device) => (
           <option key={device.id} value={device.id}>
-            {device.name}
+            {device.name} ({device.serialNumber})
           </option>
         ))}
       </select>

@@ -31,6 +31,7 @@ const getFieldLabel = (field: string): string => {
     deviceType: 'Tipo de dispositivo',
     status: 'Status',
     phone: 'Telefone',
+    email: 'E-mail',
     token: 'Token',
   }
 
@@ -72,6 +73,16 @@ export const extractErrorMessage = (error: unknown): string => {
 
   if (axiosError.response?.data) {
     const errorData = axiosError.response.data
+
+    if (axiosError.response.status === 403) {
+      const details = errorData.details as ErrorDetails & {
+        userRole?: string
+        allowedRoles?: string[]
+      }
+      if (details?.userRole === 'enthusiast' && details?.allowedRoles?.includes('scientist')) {
+        return 'Conta Entusiasta não pode gerenciar projetos. Cadastre-se como Cientista ou crie uma nova conta.'
+      }
+    }
 
     if (errorData.message) {
       return errorData.message

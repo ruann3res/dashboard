@@ -25,7 +25,7 @@ export const RegisterPage = () => {
       name: '',
       email: '',
       phone: '',
-      role: 'enthusiast',
+      role: 'scientist',
     },
   })
 
@@ -199,9 +199,14 @@ export const RegisterPage = () => {
                     errors.role ? 'select-error' : ''
                   }`}
                 >
-                  <option value="enthusiast">Entusiasta</option>
-                  <option value="scientist">Cientista</option>
+                  <option value="scientist">Cientista — gerencia projetos e dispositivos</option>
+                  <option value="enthusiast">Entusiasta — apenas visualização (sem criar projetos)</option>
                 </select>
+                {!errors.role && (
+                  <p className="text-xs text-base-content/60">
+                    Para usar o dashboard e criar projetos, escolha Cientista.
+                  </p>
+                )}
                 {errors.role && (
                   <p className="text-xs text-error">{errors.role.message}</p>
                 )}

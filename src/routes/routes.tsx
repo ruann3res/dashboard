@@ -1,9 +1,18 @@
-import { Routes, Route } from 'react-router-dom'
-import { ActuatorPage,ProjectsPage,DevicePage, SettingsPage, NotFoundPage } from '@/pages/App'
+import { Routes, Route, Navigate } from 'react-router-dom'
+import { ActuatorPage, ProjectsPage, DevicePage, SettingsPage, MonitorPage, NotFoundPage } from '@/pages/App'
 import { LoginPage, RegisterPage, VerifyPage } from '@/pages/Auth'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
+import { ScientistRoute } from '@/components/ScientistRoute'
 import { GuestRoute } from '@/components/GuestRoute'
+import { useCurrentUser } from '@/hooks/use-current-user'
 
+const HomePage = () => {
+  const { isEnthusiast } = useCurrentUser()
+  if (isEnthusiast) {
+    return <Navigate to="/monitor" replace />
+  }
+  return <ProjectsPage />
+}
 
 export const AppRoutes = () => {
   return (
@@ -36,15 +45,17 @@ export const AppRoutes = () => {
         path="/"
         element={
           <ProtectedRoute>
-            <ProjectsPage />
+            <HomePage />
           </ProtectedRoute>
         }
       />
       <Route
         path="/actuators"
         element={
-          <ProtectedRoute>    
-            <ActuatorPage />
+          <ProtectedRoute>
+            <ScientistRoute>
+              <ActuatorPage />
+            </ScientistRoute>
           </ProtectedRoute>
         }
       />
@@ -52,7 +63,17 @@ export const AppRoutes = () => {
         path="/devices"
         element={
           <ProtectedRoute>
-            <DevicePage />
+            <ScientistRoute>
+              <DevicePage />
+            </ScientistRoute>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/monitor"
+        element={
+          <ProtectedRoute>
+            <MonitorPage />
           </ProtectedRoute>
         }
       />
@@ -60,7 +81,9 @@ export const AppRoutes = () => {
         path="/settings"
         element={
           <ProtectedRoute>
-            <SettingsPage />
+            <ScientistRoute>
+              <SettingsPage />
+            </ScientistRoute>
           </ProtectedRoute>
         }
       />

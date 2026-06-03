@@ -3,16 +3,21 @@ import { post } from '@/services/api'
 import { useToast } from '@/hooks'
 import { cookieUtils } from '@/lib/cookies'
 import { extractErrorMessage } from '@/lib/error-utils'
+import type { AuthLoginRequest, TokenDeliveryChannel } from '@/types/auth'
 
-interface AuthRequest {
-  phone: string
+const AUTH_DELIVERY_CHANNEL_KEY = 'auth_delivery_channel'
+
+export const getStoredAuthDeliveryChannel = (): TokenDeliveryChannel => {
+  const stored = localStorage.getItem(AUTH_DELIVERY_CHANNEL_KEY)
+  return stored === 'whatsapp' ? 'whatsapp' : 'email'
 }
 
 interface AuthResponse {
   success: boolean
   message: string
   data: {
-    token: string
+    token?: string
+    message?: string
   }
 }
 
@@ -32,10 +37,12 @@ export const useAuth = () => {
   const { showToast } = useToast()
 
   return useMutation({
-    mutationFn: async (phone: string) => {
-      return post<AuthRequest, AuthResponse>('/auth', { phone })
+    mutationFn: async ({ email, channel }: AuthLoginRequest) => {
+      return post<AuthLoginRequest, AuthResponse>('/auth', { email, channel })
     },
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
+      localStorage.setItem(AUTH_DELIVERY_CHANNEL_KEY, variables.channel)
+
       const token = data.data?.token
       if (token && token !== 'undefined' && token.trim() !== '') {
         localStorage.setItem('temp_auth_token', token)

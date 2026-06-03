@@ -2,15 +2,18 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/Button'
 import { useAuth } from '@/hooks'
+import { TokenDeliveryChannelSelector } from './components/TokenDeliveryChannelSelector'
+import type { TokenDeliveryChannel } from '@/types/auth'
 
 interface LoginFormData {
-  phone: string
+  email: string
+  channel: TokenDeliveryChannel
 }
 
 export const LoginPage = () => {
   const navigate = useNavigate()
   const { mutate: login, isPending: isLoading } = useAuth()
-  
+
   const {
     register,
     handleSubmit,
@@ -19,71 +22,22 @@ export const LoginPage = () => {
     setValue,
   } = useForm<LoginFormData>({
     defaultValues: {
-      phone: '',
+      email: '',
+      channel: 'email',
     },
   })
 
-  const phoneValue = watch('phone')
-
-  const formatPhone = (value: string) => {
-    return value.replace(/\D/g, '')
-  }
-
-  const formatPhoneMask = (value: string) => {
-    const numbers = formatPhone(value)
-    const length = numbers.length
-
-    const phoneFormats = [
-      {
-        maxLength: 2,
-        format: (nums: string) => nums,
-      },
-      {
-        maxLength: 6,
-        format: (nums: string) => `(${nums.slice(0, 2)}) ${nums.slice(2)}`,
-      },
-      {
-        maxLength: 7,
-        format: (nums: string) => `(${nums.slice(0, 2)}) ${nums.slice(2, 6)}-${nums.slice(6)}`,
-      },
-      {
-        maxLength: 10,
-        format: (nums: string) => {
-          // Para 10 dígitos, verifica se começa com 9 (celular) ou não (fixo)
-          const isCellphone = nums[2] === '9'
-          if (isCellphone) {
-            // Celular: (XX) 9XXXX-XXXX
-            return `(${nums.slice(0, 2)}) ${nums.slice(2, 7)}-${nums.slice(7)}`
-          } else {
-            // Fixo: (XX) XXXX-XXXX
-            return `(${nums.slice(0, 2)}) ${nums.slice(2, 6)}-${nums.slice(6)}`
-          }
-        },
-      },
-      {
-        maxLength: 11,
-        format: (nums: string) => `(${nums.slice(0, 2)}) ${nums.slice(2, 7)}-${nums.slice(7, 11)}`,
-      },
-    ]
-
-    const format = phoneFormats.find((f) => length <= f.maxLength) || phoneFormats[phoneFormats.length - 1]
-    return format.format(numbers)
-  }
-
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const numbers = formatPhone(e.target.value)
-    const limitedNumbers = numbers.slice(0, 11)
-    setValue('phone', limitedNumbers, { shouldValidate: true })
-  }
-
-  const displayPhoneValue = phoneValue ? formatPhoneMask(phoneValue) : ''
+  const channelValue = watch('channel')
 
   const onSubmit = (data: LoginFormData) => {
-    login(data.phone, {
-      onSuccess: () => {
-        navigate('/verify', { state: { from: '/' } })
-      },
-    })
+    login(
+      { email: data.email.trim(), channel: data.channel },
+      {
+        onSuccess: () => {
+          navigate('/verify', { state: { from: '/', channel: data.channel } })
+        },
+      }
+    )
   }
 
   return (
@@ -128,52 +82,40 @@ export const LoginPage = () => {
 
           <div className="hidden lg:block mb-10 space-y-3">
             <h2 className="text-4xl font-bold text-base-content tracking-tight">Bem-vindo de volta</h2>
-            <p className="text-base-content/70 text-lg">Entre com seu telefone para continuar</p>
+            <p className="text-base-content/70 text-lg">Entre com seu e-mail e receba o código de acesso</p>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-5">
               <div className="space-y-2">
-                <label htmlFor="phone" className="block text-sm font-semibold text-base-content">
-                  Telefone
+                <label htmlFor="email" className="block text-sm font-semibold text-base-content">
+                  E-mail
                 </label>
                 <input
-                  id="phone"
-                  type="tel"
-                  {...register('phone', {
-                    required: 'Telefone é obrigatório',
-                    validate: {
-                      minLength: (value) => {
-                        const numbers = formatPhone(value)
-                        return numbers.length >= 10 || 'Telefone deve ter pelo menos 10 dígitos'
-                      },
-                      maxLength: (value) => {
-                        const numbers = formatPhone(value)
-                        return numbers.length <= 11 || 'Telefone deve ter no máximo 11 dígitos'
-                      },
-                      onlyNumbers: (value) => {
-                        return /^\d+$/.test(formatPhone(value)) || 'Digite apenas números'
-                      },
+                  id="email"
+                  type="email"
+                  {...register('email', {
+                    required: 'E-mail é obrigatório',
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: 'E-mail inválido',
                     },
                   })}
-                  value={displayPhoneValue}
-                  onChange={handlePhoneChange}
                   className={`input input-bordered w-full rounded-lg h-12 focus:input-primary transition-colors ${
-                    errors.phone ? 'input-error' : ''
+                    errors.email ? 'input-error' : ''
                   }`}
-                  placeholder="(34) 98619-9953"
-                  autoComplete="tel"
-                  maxLength={15}
+                  placeholder="seu@email.com"
+                  autoComplete="email"
                 />
-                {errors.phone && (
-                  <p className="text-xs text-error">{errors.phone.message}</p>
-                )}
-                {!errors.phone && (
-                  <p className="text-xs text-base-content/60">
-                    Digite apenas números
-                  </p>
+                {errors.email && (
+                  <p className="text-xs text-error">{errors.email.message}</p>
                 )}
               </div>
+
+              <TokenDeliveryChannelSelector
+                value={channelValue}
+                onChange={(channel) => setValue('channel', channel, { shouldValidate: true })}
+              />
             </div>
 
             <Button
@@ -206,4 +148,3 @@ export const LoginPage = () => {
     </div>
   )
 }
-

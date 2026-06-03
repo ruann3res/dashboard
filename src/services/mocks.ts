@@ -143,7 +143,7 @@ const generateMockToken = () => `mock-token-${Date.now()}-${Math.random().toStri
  * Mocks para autenticação
  */
 export const mockAuth = {
-  login: async (_body: { phone: string }) => {
+  login: async (_body: { email: string }) => {
     await delay(800)
     
     return {

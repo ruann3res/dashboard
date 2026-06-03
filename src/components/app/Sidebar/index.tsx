@@ -2,13 +2,16 @@ import { Link, useLocation } from 'react-router-dom'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { useSidebar } from '@/contexts/SidebarContext'
 import { useLogout } from '@/hooks/use-logout'
-import { menuItems } from './menu'
+import { useCurrentUser } from '@/hooks/use-current-user'
+import { getMenuItemsForRole } from './menu'
 import type { MenuItem } from './menu'
 
 export const Sidebar = () => {
   const location = useLocation()
   const { isCollapsed, isMobileOpen, toggleSidebar } = useSidebar()
   const { logout } = useLogout()
+  const { role } = useCurrentUser()
+  const visibleMenuItems = getMenuItemsForRole(role)
 
   return (
     <aside 
@@ -32,7 +35,7 @@ export const Sidebar = () => {
       
       <nav className="flex-1 p-2 overflow-y-auto">
         <ul className="space-y-1">
-          {menuItems.map((item: MenuItem) => {
+          {visibleMenuItems.map((item: MenuItem) => {
             const isActive = location.pathname === item.path
             return (
               <li key={item.path}>
